@@ -1,0 +1,8 @@
+# Runtime files
+screenshots/
+watcher.log
+.last-processed
+
+# macOS
+.DS_Store
+*.swp

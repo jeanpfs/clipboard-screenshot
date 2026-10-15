@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template only. install.sh generates the live plist with absolute paths. -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.stevederico.clipboard-screenshot</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>PATH_TO_SUPPORT/Clipboard Screenshot.app/Contents/MacOS/clipboard-screenshot</string>
+    </array>
+    <key>WatchPaths</key>
+    <array>
+        <string>PATH_TO_DESKTOP</string>
+    </array>
+    <key>ThrottleInterval</key>
+    <integer>1</integer>
+    <key>ExitTimeOut</key>
+    <integer>30</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>LimitLoadToSessionType</key>
+    <string>Aqua</string>
+    <key>ProcessType</key>
+    <string>Interactive</string>
+</dict>
+</plist>
