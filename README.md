@@ -8,6 +8,10 @@
 
 `⌘⇧3` / `⌘⇧4` → `⌘V`
 
+<p align="center">
+  <img src="assets/demo.gif" alt="Cmd+Shift+4 over a region, then Cmd+V pastes it into TextEdit" width="100%">
+</p>
+
 macOS won’t save a file **and** put the image on the clipboard with the same shortcut. This fills that gap: your usual shortcuts still save a file; this tool copies that image to the pasteboard as soon as the file appears so you can paste.
 
 Does **not** move, rename, or delete screenshots. Zero dependencies — `launchd`, `zsh`, `osascript`.

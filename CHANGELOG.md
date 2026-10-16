@@ -4,6 +4,9 @@ All notable changes to this project are documented here. The format is based on 
 
 ## [Unreleased]
 
+### Docs
+- README demo GIF: the real `⌘⇧4` then `⌘V` flow recorded on macOS, with the scripts that record it in `scripts/demo/`.
+
 ## [0.1.0] - 2026-10-15
 
 First release of this fork of [stevederico/clipboard-screenshot](https://github.com/stevederico/clipboard-screenshot) (MIT), with fixes for macOS Sequoia. Credit for the original tool goes to Steve Derico.
