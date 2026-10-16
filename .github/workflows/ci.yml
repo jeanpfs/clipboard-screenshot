@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    name: syntax check
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: zsh -n
+        run: |
+          set -euo pipefail
+          for f in install.sh uninstall.sh watcher.sh; do
+            echo "zsh -n $f"
+            zsh -n "$f"
+          done
+      - name: VERSION is semver
+        run: grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' VERSION

@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to validate (without leading v); no release is published from a manual run
+        required: true
+        default: '0.1.0'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: publish release
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    env:
+      TAG_NAME: ${{ github.event_name == 'push' && github.ref_name || format('v{0}', inputs.version) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Verify tag matches VERSION
+        run: |
+          set -euo pipefail
+          declared=$(tr -d '[:space:]' < VERSION)
+          if [ "v$declared" != "$TAG_NAME" ]; then
+            echo "::error::Tag $TAG_NAME does not match VERSION file ($declared)"
+            exit 1
+          fi
+
+      - name: Syntax check
+        run: |
+          set -euo pipefail
+          for f in install.sh uninstall.sh watcher.sh; do
+            zsh -n "$f"
+          done
+
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          set -euo pipefail
+          ver="${TAG_NAME#v}"
+          pat="${ver//./\\.}"
+          sed -n "/^## \[$pat\]/,/^## /p" CHANGELOG.md | grep -v '^## ' > notes.md || true
+          if [ -s notes.md ] && grep -q '[^[:space:]]' notes.md; then
+            echo "Release notes taken from CHANGELOG.md:"
+            cat notes.md
+          else
+            echo "No CHANGELOG section for $ver; falling back to generated notes"
+            rm -f notes.md
+          fi
+
+      - name: Create or update GitHub release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="$TAG_NAME"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            if [ -f notes.md ]; then
+              gh release edit "$tag" --title "$tag" --notes-file notes.md
+            else
+              echo "Release $tag already exists; leaving its notes untouched"
+            fi
+          elif [ -f notes.md ]; then
+            gh release create "$tag" --verify-tag --title "$tag" --notes-file notes.md
+          else
+            gh release create "$tag" --verify-tag --title "$tag" --generate-notes
+          fi
